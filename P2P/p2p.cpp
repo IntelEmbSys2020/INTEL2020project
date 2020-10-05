@@ -45,8 +45,17 @@ bool P2P_Init(p2p * target)
         {
             return false;
         }
-
-        //初始化TCP套接字
+        
+        //TCP套接字绑定端口
+        target->addr_send.sin_port = htons(target->port_terminal_TCP);
+        if(bind(  target->socket_TCP_local,
+                            (struct sockaddr *)&(target->addr_send),
+                            sizeof(target->addr_send)   )
+                < 0)
+        {
+            return false;
+        }
+        //TCP套接字与服务器握手
         target->addr_send.sin_family = AF_INET;     //IPv4地址
         target->addr_send.sin_addr.s_addr = inet_addr(target->IPv4_server); //服务器地址
         target->addr_send.sin_port = htons(target->port_server_TCP);  //服务器端口
@@ -147,6 +156,16 @@ bool P2P_Init(p2p * target)
         {
             return false;
         }
+        //绑定UDP端口号
+        target->addr_send.sin_port = htons(target->port_server_UDP);
+        if( bind(
+                target->socket_UDP,
+                (struct sockaddr *)&(target->addr_send),
+                sizeof(target->addr_send)) 
+            == -1)
+        {
+            return false;
+        }
 
         //启动监听，并设置最高连接数量为4
         if(listen(target->socket_TCP_local,4) == -1)
@@ -155,13 +174,14 @@ bool P2P_Init(p2p * target)
         }
 
         //握手
-
+            //先地面站
             target->socket_TCP_ConnectStation = accept(target->socket_TCP_local,
                                                         (struct sockaddr *) &(target->addr_recv),
                                                         (socklen_t *)&addrLength   );
             if(target->socket_TCP_ConnectStation == -1)
                 return false;
-
+            
+            //后作业端
             target->socket_TCP_ConnectTerminal = accept(target->socket_TCP_local,
                                                         (struct sockaddr *) &(target->addr_recv),
                                                         (socklen_t *)&addrLength   );
@@ -217,18 +237,32 @@ bool P2P_Init(p2p * target)
         if(recvAppID != target->APP_ID)
             return false;
 
-        //发送地面站的IP给作业端
-        target->addr_send.sin_family = AF_INET;     //IPv4地址
-        target->addr_send.sin_addr.s_addr = inet_addr(target->IPv4_terminal);                  //任意对象
-        target->addr_send.sin_port = htons(target->port_terminal_UDP);  //本地开放端口
+        //-----------发送地面站的IP给作业端(TCP)--------
         
-        sendRet = sendto(target->socket_TCP_ConnectTerminal,
+        sendRet = send(target->socket_TCP_ConnectTerminal,
                                                 &(target->IPv4_station),sizeof(target->IPv4_station),
-                                                0,
-                                                (sockaddr *)&(target->addr_send),addrLength);
+                                                0);
+        //发送地面站UDP端口号给作业端
+        sendRet = send(target->socket_TCP_ConnectTerminal,
+                                                &(target->port_station_UDP),sizeof(target->port_station_UDP),
+                                                0);
+
+        //----------发送作业端的IP给地面站(TCP)--------
         
+        sendRet = send(target->socket_TCP_ConnectStation,
+                                                &(target->IPv4_terminal),sizeof(target->IPv4_terminal),
+                                                0);
+        //发送作业端UDP端口号给地面站
+        sendRet = send(target->socket_TCP_ConnectStation,
+                                                &(target->port_terminal_UDP),sizeof(target->port_terminal_UDP),
+                                                0);
+
         //接收成功打洞信号
         recvRet = recv(target->socket_TCP_ConnectTerminal,
+                                    &(ctrlMsg),sizeof(ctrlMsg),0);
+
+        //把好消息告诉地面站
+        sendRet = send(target->socket_TCP_ConnectStation,
                                     &(ctrlMsg),sizeof(ctrlMsg),0);
 
         break;
