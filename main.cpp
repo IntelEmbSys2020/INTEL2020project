@@ -76,7 +76,7 @@ int main()
 
     //参数依次是：创建的线程id，线程参数，调用的函数，传入的函数参数
     rc2 = pthread_create(&threads[1], NULL,
-                    tts, (void *)&td1);
+                    tts, (void *)&td2);
     if (rc2){
         cout << "Error:unable to create thread," << rc2 << endl;
         exit(-1);

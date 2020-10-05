@@ -1,5 +1,6 @@
 #include "myThread.hpp"
 using namespace std;
+#include "Demo/samples/xtts_offline_sample/xtts_offline_sample.h"
 
 /*	@brief:	        capture and send the img to the client. sleep 1s and do it once.
  *	@notice:        thread1
@@ -50,14 +51,37 @@ void* captureImg(void *threadarg)
 **/
 void *tts(void *threadarg)
 {
-    // struct thread_data *my_data;
-    
-    // my_data = (struct thread_data *) threadarg;
-    
+    struct thread_data *my_data; 
+    my_data = (struct thread_data *) threadarg;
+    //把传入的参数赋值
+    p2p *target = my_data->p2p_target;
+    void *data = my_data->data;
+    size_t dataLength = my_data->dataLength;
 
+    float age;
+    char* gender;
+    char* glass;
     //enter the forever loop
     while(1){
-        P2P_recvData(p2p *target,void * data,size_t dataLength);
+        //receive the data
+        //receive age
+        if(P2P_recvData(target, &age, sizeof(float))==sizeof(float))
+        {
+            printf("the age data hasn't been received.\n");
+        }
+        //receive gender
+        if(P2P_recvData(target, &gender, sizeof(char*))==sizeof(char*))
+        {
+            printf("the gender data hasn't been received.\n");
+        }
+        //receive glass
+        if(P2P_recvData(target, &glass, sizeof(char*))==sizeof(char*))
+        {
+            printf("the glasses data hasn't been received.\n");
+        }
+
+        //give out the voice
+        gen_voice(age, gender, glass);
     }
     
     pthread_exit(NULL);

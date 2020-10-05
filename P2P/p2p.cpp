@@ -354,7 +354,7 @@ bool P2P_sendCMD(p2p *target,void * data,size_t dataLength)
                 dataLength（size_t）接收池长度
  *	@retv:	        发送成功or失败
 **/
-bool P2P_recvData(p2p *target,void * data,size_t dataLength)
+long P2P_recvData(p2p *target,void * data,size_t dataLength)
 {
     int addrLength = sizeof(target->addr_recv);
     int recvRet;
@@ -369,7 +369,7 @@ bool P2P_recvData(p2p *target,void * data,size_t dataLength)
                                                 (sockaddr *)&(target->addr_recv),
                                                 (socklen_t *)&addrLength);
             if(recvRet == -1)
-                return false;
+                return -1;
             if(target->addr_recv.sin_addr.s_addr != inet_addr(target->IPv4_station))
                 continue;
         } while (0);
@@ -378,11 +378,11 @@ bool P2P_recvData(p2p *target,void * data,size_t dataLength)
         break;
 
     default:
-        return false;
+        return -1;
         break;
     }
 
-    return true;
+    return recvRet;
 
 }
 
@@ -395,7 +395,7 @@ bool P2P_recvData(p2p *target,void * data,size_t dataLength)
                 dataLength（size_t）接收池长度
  *	@retv:	        发送成功or失败
 **/
-bool P2P_recvCMD(p2p *target,void * data,size_t dataLength)
+long P2P_recvCMD(p2p *target,void * data,size_t dataLength)
 {
     int addrLength = sizeof(target->addr_recv);
     int recvRet;
@@ -405,16 +405,16 @@ bool P2P_recvCMD(p2p *target,void * data,size_t dataLength)
         recvRet = recv(target->socket_TCP_local,
                                         data,dataLength,0);
         if(recvRet == -1)
-            return false;
+            return -1;
         
         break;
 
     default:
-        return false;
+        return -1;
         break;
     }
 
-    return true;
+    return recvRet;
     
 }
 

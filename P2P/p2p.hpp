@@ -109,7 +109,7 @@ bool P2P_sendCMD(p2p *target,void * data,size_t dataLength);
                 dataLength（size_t）接收池长度
  *	@retv:	        发送成功or失败
 **/
-bool P2P_recvData(p2p *target,void * data,size_t dataLength);
+long P2P_recvData(p2p *target,void * data,size_t dataLength);
 
 /*	@brief:	        接收命令or重要数据
  *	@notice:        用的是TCP，建议挂线程
@@ -120,7 +120,7 @@ bool P2P_recvData(p2p *target,void * data,size_t dataLength);
                 dataLength（size_t）接收池长度
  *	@retv:	        发送成功or失败
 **/
-bool P2P_recvCMD(p2p *target,void * data,size_t dataLength);
+long P2P_recvCMD(p2p *target,void * data,size_t dataLength);
 
 /*	@brief:	        P2P中转服务
  *	@notice:        建议开一个线程不断调用该函数，执行一次相当于中转一次

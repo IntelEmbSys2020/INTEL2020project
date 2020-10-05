@@ -2,6 +2,7 @@
 #define _myThread_
 #include "worker/cameraGetImage/cameraGetImage.h"
 #include "P2P/p2p.hpp" 
+#include <iostream>
 
 struct thread_data{
     //first two are used by func: camera_pixBufferInit
