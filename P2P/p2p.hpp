@@ -66,6 +66,9 @@ struct p2p
     struct sockaddr_in addr_send;
     //数据接收地址设置器
     struct sockaddr_in addr_recv;
+
+    //IP地址字符串转换中转变量
+    struct in_addr addrCache;
 };
 
 /*	@brief:	    通信初始化（进行TCP握手，UDP穿透）
