@@ -76,6 +76,13 @@ bool P2P_Init(p2p * target)
         #endif
         /*****************调试辅助打印(END)********************/
 
+
+        /*****************调试辅助打印(START)********************/
+        #ifdef __USER_DEBUG_P2P_CPP__
+        std::cout<<"terminal TCP waiting connect with server!"<<std::endl;
+        #endif
+        /*****************调试辅助打印(END)********************/
+
         //TCP套接字与服务器握手
         target->addr_send.sin_family = AF_INET;     //IPv4地址
         target->addr_send.sin_addr.s_addr = inet_addr(target->IPv4_server); //服务器地址
