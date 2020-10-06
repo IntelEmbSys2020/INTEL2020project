@@ -45,7 +45,7 @@ struct p2p
     int port_terminal_TCP;
     int port_terminal_UDP;
     //服务器IP和端口
-    char IPv4_server[16];
+    char IPv4_server[100];
     int port_server_TCP;
     int port_server_UDP;
     //总站IP和端口
