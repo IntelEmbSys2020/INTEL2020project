@@ -424,7 +424,7 @@ bool P2P_Init(p2p * target)
         //-----------发送地面站的IP给作业端(TCP)--------
         
         sendRet = send(target->socket_TCP_ConnectTerminal,
-                                                &(target->IPv4_station),strlen(target->IPv4_station)-1,
+                                                &(target->IPv4_station),strlen(target->IPv4_station),
                                                 0);
 
         /*****************调试辅助打印(START)********************/
