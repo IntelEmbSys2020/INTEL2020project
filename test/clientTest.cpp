@@ -13,5 +13,6 @@ int main(int argc, char const *argv[])
     communicater.port_server_UDP = 8001;
     P2P_Init(&communicater);
 
+    std::cout<<"作业端结束！"<<std::endl;
     return 0;
 }
