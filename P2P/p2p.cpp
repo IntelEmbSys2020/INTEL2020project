@@ -323,7 +323,7 @@ bool P2P_Init(p2p * target)
             
             /*****************调试辅助打印(START)********************/
             #ifdef __USER_DEBUG_P2P_CPP__
-            std::cout<<"server connect with Terminal success!"
+            std::cout<<"server connect with Terminal success!"<<std::endl
                     <<"Terminal IP is: "<<target->IPv4_terminal<<std::endl;
             #endif
             /*****************调试辅助打印(END)********************/
