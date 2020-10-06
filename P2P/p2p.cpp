@@ -354,17 +354,17 @@ bool P2P_Init(p2p * target)
             return false;
         }
         target->port_station_UDP = target->addr_recv.sin_port;
-                
-        /*****************调试辅助打印(START)********************/
-        #ifdef __USER_DEBUG_P2P_CPP__
-        std::cout<<"server recv AppID from station success!"<<std::endl;
-        std::cout<<"station UDP port is :"<< target->port_station_UDP<<std::endl;
-        #endif
-        /*****************调试辅助打印(END)********************/
 
         //校验口令
         if(recvAppID != target->APP_ID)
             return false;
+                                
+        /*****************调试辅助打印(START)********************/
+        #ifdef __USER_DEBUG_P2P_CPP__
+        std::cout<<"server recv AppID:"<<recvAppID<<" from station success!"<<std::endl
+            <<"station UDP port is :"<< target->port_station_UDP<<std::endl;
+        #endif
+        /*****************调试辅助打印(END)********************/
 
         //对作业端发送穿透开始指令
         ctrlMsg = P2P_begin;
@@ -373,6 +373,12 @@ bool P2P_Init(p2p * target)
         {
             return false;
         }
+
+        /*****************调试辅助打印(START)********************/
+        #ifdef __USER_DEBUG_P2P_CPP__
+        std::cout<<"server send begin massage to TERMINAL success!"<<std::endl;
+        #endif
+        /*****************调试辅助打印(END)********************/
 
         //接收作业端发来的口令
         recvRet = recvfrom(target->socket_UDP,
@@ -386,38 +392,71 @@ bool P2P_Init(p2p * target)
             return false;
         }
         target->port_terminal_UDP = target->addr_recv.sin_port;
-                
-        /*****************调试辅助打印(START)********************/
-        #ifdef __USER_DEBUG_P2P_CPP__
-        std::cout<<"server recv AppID from terminal success!"<<std::endl;
-        std::cout<<"terminal UDP port is :"<< target->port_terminal_UDP<<std::endl;
-        #endif
-        /*****************调试辅助打印(END)********************/
 
 
         //校验口令
         if(recvAppID != target->APP_ID)
+        {
             return false;
+                
+            /*****************调试辅助打印(START)********************/
+            #ifdef __USER_DEBUG_P2P_CPP__
+            std::cout<<"server recv AppID: "<<recvAppID<<" from terminal success!"<<std::endl;
+            std::cout<<"terminal UDP port is :"<< target->port_terminal_UDP<<std::endl;
+            #endif
+            /*****************调试辅助打印(END)********************/
+
+        }
 
         //-----------发送地面站的IP给作业端(TCP)--------
         
         sendRet = send(target->socket_TCP_ConnectTerminal,
                                                 &(target->IPv4_station),strlen(target->IPv4_station),
                                                 0);
+
+        /*****************调试辅助打印(START)********************/
+        #ifdef __USER_DEBUG_P2P_CPP__
+        std::cout<<"server send IP of station to TERMINAL success!"<<std::endl;
+        std::cout<<"IP of station is : "<<target->IPv4_station<<std::endl;
+        #endif
+        /*****************调试辅助打印(END)********************/
+
         //发送地面站UDP端口号给作业端
         sendRet = send(target->socket_TCP_ConnectTerminal,
                                                 &(target->port_station_UDP),sizeof(target->port_station_UDP),
                                                 0);
+
+        /*****************调试辅助打印(START)********************/
+        #ifdef __USER_DEBUG_P2P_CPP__
+        std::cout<<"server send UDP port of station to TERMINAL success!"<<std::endl;
+        std::cout<<"port of station is : "<<target->port_station_UDP<<std::endl;
+        #endif
+        /*****************调试辅助打印(END)********************/
 
         //----------发送作业端的IP给地面站(TCP)--------
         
         sendRet = send(target->socket_TCP_ConnectStation,
                                                 &(target->IPv4_terminal),strlen(target->IPv4_terminal),
                                                 0);
+
+        /*****************调试辅助打印(START)********************/
+        #ifdef __USER_DEBUG_P2P_CPP__
+        std::cout<<"server send IP of terminal to STATION success!"<<std::endl;
+        std::cout<<"IP of terminal is : "<<target->IPv4_terminal<<std::endl;
+        #endif
+        /*****************调试辅助打印(END)********************/
+
         //发送作业端UDP端口号给地面站
         sendRet = send(target->socket_TCP_ConnectStation,
                                                 &(target->port_terminal_UDP),sizeof(target->port_terminal_UDP),
                                                 0);
+
+        /*****************调试辅助打印(START)********************/
+        #ifdef __USER_DEBUG_P2P_CPP__
+        std::cout<<"server send port of terminal to STATION success!"<<std::endl;
+        std::cout<<"port of terminal is : "<<target->port_terminal_UDP<<std::endl;
+        #endif
+        /*****************调试辅助打印(END)********************/
 
         //接收成功打洞信号
         recvRet = recv(target->socket_TCP_ConnectStation,
@@ -426,6 +465,12 @@ bool P2P_Init(p2p * target)
         //把好消息告诉作业站
         sendRet = send(target->socket_TCP_ConnectTerminal,
                                     &(ctrlMsg),sizeof(ctrlMsg),0);
+
+        /*****************调试辅助打印(START)********************/
+        #ifdef __USER_DEBUG_P2P_CPP__
+        std::cout<<"server P2P init FINISH!"<<std::endl;
+        #endif
+        /*****************调试辅助打印(END)********************/
 
         break;
 
