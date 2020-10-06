@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include "MvCameraControl.h"
+#include "../include/MvCameraControl.h"
 #include "cameraGetImage.h"
 
 /*	@brief:	     打印枚举到的相机信息
@@ -169,7 +169,7 @@ bool camera_pixBufferInit(cameraObeject * target,imgData * buffer)
 {
     buffer->sourceLength = target->param.nCurValue;
     buffer->sourceData = new unsigned char [buffer->sourceLength];
-    if(buffer->sourceData == nullptr)
+    if(buffer->sourceData == NULL)
     {
         std::cout<<"Create buffer Error!"<<std::endl;
         return false;
@@ -181,7 +181,7 @@ bool camera_pixBufferInit(cameraObeject * target,imgData * buffer)
                                                                                         1000);
     buffer->imageSize = target->frameInf.nWidth * target->frameInf.nHeight * 4 + 2048;
     buffer->imageData = new unsigned char [buffer->imageSize];
-    if(buffer->imageData == nullptr)
+    if(buffer->imageData == NULL)
     {
         std::cout<<"Create buffer Error!"<<std::endl;
         return false;

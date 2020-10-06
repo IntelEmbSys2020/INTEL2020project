@@ -1,5 +1,6 @@
 #include "myThread.hpp"
 #include "Demo/samples/xtts_offline_sample/xtts_offline_sample.h"
+#include "../P2P/p2p.hpp" 
 using namespace std;
 /*	@brief:	        capture and send the img to the client. sleep 1s and do it once.
  *	@notice:        thread1
@@ -32,7 +33,8 @@ void* captureImg(void *threadarg)
 
         //send the frame to the client
         //p2p *target,void * data,size_t dataLength
-        if(P2P_sendData(my_data->p2p_target,my_data->data,my_data->dataLength) == false)
+        unsigned long dataLength = (unsigned long)my_data->dataLength;
+        if(P2P_sendData(my_data->p2p_target,my_data->data, dataLength) == false)
         {
             cout << "send one frame failed." << endl;
         }

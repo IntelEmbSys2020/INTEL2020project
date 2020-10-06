@@ -4,16 +4,16 @@
 
 #include <iostream>
 
-#include "MvCameraControl.h"
+#include "../include/MvCameraControl.h"
 
 typedef struct imgData
 {
     int sourceLength;   //摄像头采集的原始数据
-    void * sourceData;
+    unsigned char * sourceData;
 
     int imageLength;    //图像数据长度
     int imageSize;          //缓冲区总数据长度
-    void * imageData;   //转换后的bmp图像数据
+    unsigned char * imageData;   //转换后的bmp图像数据
 }imgData;
 
 typedef struct cameraObeject

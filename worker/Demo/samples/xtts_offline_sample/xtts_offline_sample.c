@@ -16,6 +16,7 @@
 #include "../../include/qtts.h"
 #include "../../include/msp_cmn.h"
 #include "../../include/msp_errors.h"
+#include "../../include/msp_types.h"
 // #include <linux/soundcard.h>
 #include "xtts_offline_sample.h"
 
@@ -25,6 +26,22 @@
 typedef int SR_DWORD;
 typedef short int SR_WORD ;
 
+wave_pcm_hdr default_wav_hdr = 
+{
+	{ 'R', 'I', 'F', 'F' },
+	0,
+	{'W', 'A', 'V', 'E'},
+	{'f', 'm', 't', ' '},
+	16,
+	1,
+	1,
+	16000,
+	32000,
+	2,
+	16,
+	{'d', 'a', 't', 'a'},
+	0  
+};
 
 /* 文本合成 */
 int text_to_speech(const char* src_text, const char* des_path, const char* params)
