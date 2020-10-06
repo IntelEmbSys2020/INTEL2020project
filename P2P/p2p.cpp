@@ -194,11 +194,12 @@ bool P2P_Init(p2p * target)
         /*****************调试辅助打印(END)********************/
 
         //对地面站发送穿透尝试消息
+        recvAppID = target->APP_ID;
         for(int i = 0;i<5;i++)  //总尝试5次
         {
             sleep(10);
             sendRet = sendto(target->socket_UDP,
-                                                &(target->APP_ID),sizeof(target->APP_ID),
+                                                &(recvAppID+=1),sizeof(recvAppID),
                                                 0,
                                                 (sockaddr *)&(target->addr_send),sizeof(target->addr_send));
         }
@@ -220,7 +221,7 @@ bool P2P_Init(p2p * target)
 
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
-        std::cout<<"terminal has get massage from station!All NAT hole finish!"<<std::endl;
+        std::cout<<"terminal has get Success massage from station!All NAT hole finish!"<<std::endl;
         #endif
         /*****************调试辅助打印(END)********************/
 
