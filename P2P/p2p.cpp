@@ -28,6 +28,13 @@ bool P2P_Init(p2p * target)
     switch (target->localType)
     {
     case TERMINAL:      //作业端初始化
+
+        /*****************调试辅助打印(START)********************/
+        #ifdef __USER_DEBUG_P2P_CPP__
+        std::cout<<"terminal P2P init begin!"<<std::endl;
+        #endif
+        /*****************调试辅助打印(END)********************/
+
         //首先创建UDP和TCP套接字
         target->socket_UDP  = socket(AF_INET,SOCK_DGRAM,0);
         target->socket_TCP_local = socket(PF_INET,SOCK_STREAM,0);
@@ -229,6 +236,13 @@ bool P2P_Init(p2p * target)
 
 
     case SERVER:
+
+        /*****************调试辅助打印(START)********************/
+        #ifdef __USER_DEBUG_P2P_CPP__
+        std::cout<<"server P2P init begin!"<<std::endl;
+        #endif
+        /*****************调试辅助打印(END)********************/
+
         //先创建socket
         target->socket_TCP_local = socket(PF_INET,SOCK_STREAM,0);
         target->socket_UDP = socket(AF_INET,SOCK_DGRAM,0);
