@@ -411,15 +411,15 @@ bool P2P_Init(p2p * target)
         if(recvAppID != target->APP_ID)
         {
             return false;
-                
-            /*****************调试辅助打印(START)********************/
-            #ifdef __USER_DEBUG_P2P_CPP__
-            std::cout<<"server recv AppID: "<<recvAppID<<" from terminal success!"<<std::endl;
-            std::cout<<"terminal UDP port is :"<< target->port_terminal_UDP<<std::endl;
-            #endif
-            /*****************调试辅助打印(END)********************/
-
         }
+                
+        /*****************调试辅助打印(START)********************/
+        #ifdef __USER_DEBUG_P2P_CPP__
+        std::cout<<"server recv AppID: "<<recvAppID<<" from terminal success!"<<std::endl;
+        std::cout<<"terminal UDP port is :"<< target->port_terminal_UDP<<std::endl;
+        #endif
+        /*****************调试辅助打印(END)********************/
+
 
         //-----------发送地面站的IP给作业端(TCP)--------
         
