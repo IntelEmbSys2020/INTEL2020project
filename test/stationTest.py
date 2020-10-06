@@ -1,3 +1,4 @@
 from p2p import *
 
-communicater  = p2p()
+
+communicater  = P2P()
