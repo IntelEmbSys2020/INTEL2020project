@@ -182,32 +182,34 @@ bool P2P_Init(p2p * target)
         #endif
         /*****************调试辅助打印(END)********************/
 
-        //接收目标的穿透尝试消息
-        do
+        //对地面站发送穿透尝试消息
+        for(int i = 0;i<5;i++)  //总尝试5次
         {
-            recvRet = recvfrom(target->socket_UDP,&recvAppID,sizeof(recvAppID),
-                0,(sockaddr *)&(target->addr_recv),(socklen_t *)sizeof(target->addr_recv));
-            if (recvRet == -1)
-            {
-                return false;
-            }
-            if(target->addr_recv.sin_addr.s_addr != target->addr_send.sin_addr.s_addr)
-                continue;
-        } while (0);
+            sleep(10);
+            sendRet = sendto(target->socket_UDP,
+                                                &(target->APP_ID),sizeof(target->APP_ID),
+                                                0,
+                                                (sockaddr *)&(target->addr_send),sizeof(target->addr_send));
+        }
 
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
-        std::cout<<"terminal has get massage from station!"<<std::endl;
+        std::cout<<"terminal has send all massage to station!"<<std::endl;
         #endif
         /*****************调试辅助打印(END)********************/
 
-        //反馈穿透成功命令给服务器
-        ctrlMsg = P2P_OK;
-        sendRet = send(target->socket_TCP_local,&(ctrlMsg),sizeof(ctrlMsg),0);
+        recvRet = recv(target->socket_TCP_local,
+                                            &(recvAppID),
+                                            sizeof(recvAppID),0);
+        if(recvRet == -1)
+            return false;
+        else if(recvAppID != P2P_OK)
+            return false;
+        
 
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
-        std::cout<<"terminal has feed back success to server!"<<std::endl;
+        std::cout<<"terminal has get massage from station!All NAT hole finish!"<<std::endl;
         #endif
         /*****************调试辅助打印(END)********************/
 
@@ -408,11 +410,11 @@ bool P2P_Init(p2p * target)
                                                 0);
 
         //接收成功打洞信号
-        recvRet = recv(target->socket_TCP_ConnectTerminal,
+        recvRet = recv(target->socket_TCP_ConnectStation,
                                     &(ctrlMsg),sizeof(ctrlMsg),0);
 
-        //把好消息告诉地面站
-        sendRet = send(target->socket_TCP_ConnectStation,
+        //把好消息告诉作业站
+        sendRet = send(target->socket_TCP_ConnectTerminal,
                                     &(ctrlMsg),sizeof(ctrlMsg),0);
 
         break;
@@ -621,3 +623,23 @@ bool P2P_serverTransfer(p2p *target)
     return true;
 }
 
+
+/*	@brief:	        清理P2P对象使用的网络内核栈
+ *	@notice:        此函数谨慎使用！BE CAREFUL！
+ *	@author:      江榕煜（2020.10.6）
+ *	@param:
+                target（p2p对象）
+ *	@retv:	            无
+**/
+void P2P_stackClean(p2p*target)
+{
+    static char history[1024];
+    static int addrLength = sizeof(target->addr_recv);
+    while (recv(target->socket_TCP_local,history,1024,MSG_DONTWAIT) == 1024){}
+    while (recvfrom(target->socket_UDP,
+                                                history,1024,
+                                                0,
+                                                (sockaddr *)&(target->addr_recv),
+                                                (socklen_t *)&addrLength)==1024){}
+    return;
+}

@@ -134,4 +134,13 @@ long P2P_recvCMD(p2p *target,void * data,size_t dataLength);
 **/
 bool P2P_serverTransfer(p2p *target);
 
+/*	@brief:	        清理P2P对象使用的网络内核栈
+ *	@notice:        此函数谨慎使用！BE CAREFUL！
+ *	@author:      江榕煜（2020.10.6）
+ *	@param:
+                target（p2p对象）
+ *	@retv:	            工作成功or错误
+**/
+void P2P_stackClean(p2p*target);
+
 #endif

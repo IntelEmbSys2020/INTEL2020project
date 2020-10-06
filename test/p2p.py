@@ -1,5 +1,5 @@
 '''
-由于时间限制，该文件目前仅支持地面站服务
+由于时间限制，该文件目前仅支持地面站服务（锥形NAT）
 Author：江榕煜
 e-mail：2373180028@qq.com
 '''
@@ -69,11 +69,18 @@ class P2P:
                                                                             signed = True),
                                                                             (self.terminal_IPv4,self.terminal_UDPport))
         #接收作业端的握手消息
-        recvData = self.socket_TCP.recv(4)
-        if(recvData != self.__TCPcommand["P2P_begin"]):
-            print("SERVER CMD ERROR! when 等待穿透成功")
+        recvData,recvAddr = self.socket_UDP.recvfrom(4)
+        recvData = int.from_bytes(recvData,byteorder='little',signed=True)
+        print("接收作业端UDP握手消息：%d"%recvData)
+        if(recvData != self.AppID):
+            print("作业端传来的ID ERROR!")
             return False
         print("穿透成功")
+        #反馈成功信息给服务器
+        self.socket_TCP.send(self.__TCPcommand["P2P_OK"].to_bytes(
+                                                                                                                                length = 4,
+                                                                                                                                byteorder = 'little',
+                                                                                                                                signed = True))
         return True
     
     def P2P_sendData(self,data):
