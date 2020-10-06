@@ -81,7 +81,7 @@ class P2P:
             recvData,recvAddr = self.socket_UDP.recvfrom(4)
             recvData = int.from_bytes(recvData,byteorder='little',signed=True)
             print("接收作业端UDP握手消息：%d"%recvData)
-            if(recvData != self.AppID + i):
+            if(recvData != self.AppID + i -1):
                 print("作业端传来的ID ERROR!")
                 return
             print("穿透成功,测试数据包：%d"%i)
