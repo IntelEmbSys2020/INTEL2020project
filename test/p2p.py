@@ -60,7 +60,7 @@ class P2P:
         #等待接收作业端地址（TCP）
         print("等待服务器发送作业端IP...")
         recvData = self.socket_TCP.recv(16)
-        if(recvData.__len__ < 4)
+        if(len(recvData) < 4):
             print("接收作业端IP失败！")
             return False
         self.terminal_IPv4 = recvData.decode('utf-8')
