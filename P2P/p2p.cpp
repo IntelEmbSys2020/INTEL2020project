@@ -157,6 +157,7 @@ bool P2P_Init(p2p * target)
             if(recvRet == -1 )
                 return false;
         } while (0);
+        target->IPv4_station[recvRet] = '\0';
         target->addr_send.sin_addr.s_addr = inet_addr(target->IPv4_station);
         
         /*****************调试辅助打印(START)********************/
@@ -166,15 +167,12 @@ bool P2P_Init(p2p * target)
         #endif
         /*****************调试辅助打印(END)********************/
 
-        do  //等待服务器指示测试穿透目标端口
-        {
-            recvRet = recv(target->socket_TCP_local,
-                                            &(target->port_station_UDP),
-                                            sizeof(target->port_station_UDP),0);
-            if(recvRet == -1 )
-                return false;
-        } while (0);
-        target->addr_send.sin_port = target->port_station_UDP;
+        //等待服务器指示测试穿透目标端口
+        recvRet = recv(target->socket_TCP_local,
+                                        &(target->port_station_UDP),
+                                        sizeof(target->port_station_UDP),0);
+        if(recvRet == -1 )
+            return false;
 
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
@@ -425,7 +423,7 @@ bool P2P_Init(p2p * target)
         //-----------发送地面站的IP给作业端(TCP)--------
         
         sendRet = send(target->socket_TCP_ConnectTerminal,
-                                                &(target->IPv4_station),strlen(target->IPv4_station),
+                                                &(target->IPv4_station),strlen(target->IPv4_station)-1,
                                                 0);
 
         /*****************调试辅助打印(START)********************/
@@ -435,6 +433,7 @@ bool P2P_Init(p2p * target)
         #endif
         /*****************调试辅助打印(END)********************/
 
+        sleep(5);
         //发送地面站UDP端口号给作业端
         sendRet = send(target->socket_TCP_ConnectTerminal,
                                                 &(target->port_station_UDP),sizeof(target->port_station_UDP),
