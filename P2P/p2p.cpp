@@ -92,6 +92,12 @@ bool P2P_Init(p2p * target)
                                     sizeof(target->addr_send)   ) 
             == -1)
         {
+                /*****************调试辅助打印(START)********************/
+                #ifdef __USER_DEBUG_P2P_CPP__
+                std::cout<<"terminal TCP connect server ERROR!"<<std::endl;
+                #endif
+                /*****************调试辅助打印(END)********************/
+
             return false;
         }
 
@@ -292,12 +298,17 @@ bool P2P_Init(p2p * target)
                                                         (socklen_t *)&addrLength   );
             if(target->socket_TCP_ConnectStation == -1)
                 return false;
+                
+            /*****************调试辅助打印(START)********************/
+            #ifdef __USER_DEBUG_P2P_CPP__
+            std::cout<<"server connect with station success!"<<std::endl;
+            #endif
+            /*****************调试辅助打印(END)********************/
             memcpy(&(target->addrCache),&(target->addr_recv.sin_addr.s_addr),4);
             strcpy(target->IPv4_station,inet_ntoa(target->addrCache));  //存储地面站IP
             /*****************调试辅助打印(START)********************/
             #ifdef __USER_DEBUG_P2P_CPP__
-            std::cout<<"server connect with station success!"
-                    <<"station IP is: "<<target->IPv4_station<<std::endl;
+            std::cout<<"station IP is: "<<target->IPv4_station<<std::endl;
             #endif
             /*****************调试辅助打印(END)********************/
 
@@ -325,10 +336,9 @@ bool P2P_Init(p2p * target)
         {
             return false;
         }
-        
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
-        std::cout<<"server send begin massage success!"<<std::endl;
+        std::cout<<"server send begin massage to GROUND STATION success!"<<std::endl;
         #endif
         /*****************调试辅助打印(END)********************/
 

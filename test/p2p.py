@@ -44,6 +44,8 @@ class P2P:
         #等待穿透指示（TCP）
         print("等待服务器发送穿透开始指令")
         recvData = self.socket_TCP.recv(4)
+        recvData = int.from_bytes(recvData,byteorder='little',signed=True)
+        print("接收到服务器穿透指令：%d"%recvData)
         if(recvData != self.__TCPcommand["P2P_begin"]):
             print("SERVER CMD ERROR! when 穿透指示")
             return False
