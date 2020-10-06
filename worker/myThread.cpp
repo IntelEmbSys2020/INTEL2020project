@@ -1,7 +1,6 @@
 #include "myThread.hpp"
-using namespace std;
 #include "Demo/samples/xtts_offline_sample/xtts_offline_sample.h"
-
+using namespace std;
 /*	@brief:	        capture and send the img to the client. sleep 1s and do it once.
  *	@notice:        thread1
  *	@author:        cyl

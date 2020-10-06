@@ -1,6 +1,6 @@
 #ifndef _myThread_
 #define _myThread_
-#include "worker/cameraGetImage/cameraGetImage.h"
+#include "cameraGetImage/cameraGetImage.h"
 #include "P2P/p2p.hpp" 
 #include <iostream>
 
