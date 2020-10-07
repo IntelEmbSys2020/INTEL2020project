@@ -6,19 +6,21 @@ func:
     ３．发送回去处理得到的信息
 Author:cyl
 '''
-import socket
-from ../test/p2p import *
-import ../faceDetect/tensorflow_infer
 import sys
+import socket
+from p2p import *
 import cv2
-import dataTransform
+from dataTransform import *
+sys.path.append("..")
+import faceDetect.tensorflow_infer
+
 
 print("地面站开始工作")
 '''create p2p'''
 communicater  = P2P()
+
 '''enter loop'''
-while(1)
-{
+while True:
     '''receive img'''
     communicater.P2P_recvData(dataSize)
 
@@ -37,6 +39,6 @@ while(1)
     communicater.P2P_sendData(bAge)
     communicater.P2P_sendData(bGender)
     communicater.P2P_sendData(bGlasses)    
-}
+
 
 print("地面站结束")
