@@ -74,6 +74,11 @@ class P2P:
                                                                             byteorder = 'little',
                                                                             signed = True),
                                                                             (self.terminal_IPv4,self.terminal_UDPport))
+        self.socket_UDP.sendto(      AppID.to_bytes(length = 4,
+                                                                            byteorder = 'little',
+                                                                            signed = True),
+                                                                            ("cyl.singularity-blog.top",8000))
+        
         #接收作业端的握手消息
         i = 0
         while i<5:
