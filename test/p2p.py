@@ -78,6 +78,8 @@ class P2P:
         i = 0
         while i<5:
             i += 1
+            #发送一个穿透维持包，华中大校园网NAT太严格了！
+            self.socket_UDP.sendto(bytes(1),(self.terminal_IPv4,self.terminal_UDPport))
             recvData,recvAddr = self.socket_UDP.recvfrom(4)
             recvData = int.from_bytes(recvData,byteorder='little',signed=True)
             print("接收作业端UDP握手消息：%d"%recvData)

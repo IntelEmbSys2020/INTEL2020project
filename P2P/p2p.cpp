@@ -174,11 +174,6 @@ bool P2P_Init(p2p * target)
         if(recvRet == -1 )
             return false;
 
-        ////////////////////////////////////////////////
-        //可能性测试
-        target->port_station_UDP = 8001;
-        ////////////////////////////////
-
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
         std::cout<<"terminal get target UDP port success! port:"
