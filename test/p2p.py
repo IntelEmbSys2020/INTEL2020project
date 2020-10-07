@@ -69,17 +69,22 @@ class P2P:
         recvData = self.socket_TCP.recv(4)
         self.terminal_UDPport = int.from_bytes(recvData,byteorder='little',signed=True)
         print("从服务器接收到作业端UDP通信端口：%d"%self.terminal_UDPport)
-        #本地穿透
-        self.socket_UDP.sendto(      AppID.to_bytes(length = 4,
-                                                                            byteorder = 'little',
-                                                                            signed = True),
-                                                                            (self.terminal_IPv4,self.terminal_UDPport))
-        #接收作业端的握手消息
+        # #本地穿透
+        # self.socket_UDP.sendto(      AppID.to_bytes(length = 4,
+        #                                                                     byteorder = 'little',
+        #                                                                     signed = True),
+        #                                                                     (self.terminal_IPv4,self.terminal_UDPport))
+        # #接收作业端的握手消息
         i = 0
         while i<5:
             i += 1
             #发送一个穿透维持包，华中大校园网NAT太严格了！
-            self.socket_UDP.sendto(bytes(1),(self.terminal_IPv4,self.terminal_UDPport))
+            #本地穿透
+            self.socket_UDP.sendto(      AppID.to_bytes(length = 4,
+                                                                                byteorder = 'little',
+                                                                                signed = True),
+                                                                                (self.terminal_IPv4,self.terminal_UDPport))
+        
             recvData,recvAddr = self.socket_UDP.recvfrom(4)
             recvData = int.from_bytes(recvData,byteorder='little',signed=True)
             print("接收作业端UDP握手消息：%d"%recvData)
