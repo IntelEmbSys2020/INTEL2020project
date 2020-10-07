@@ -131,7 +131,7 @@ int text_to_speech(const char* src_text, const char* des_path, const char* param
 */
 
 // int main(int argc, char* argv[])
-int gen_voice(float age, char* gender, char* glass)
+int gen_voice(int age_int, char* gender, char* glass)
 {
 	int         ret                  = MSP_SUCCESS;
 	const char* login_params         = "appid = 5f27877b, work_dir = .";//登录参数,appid与msc库绑定,请勿随意改动
@@ -149,7 +149,7 @@ int gen_voice(float age, char* gender, char* glass)
 	// // float age = argv[1];
 	// char* gender = argv[2];
 	// char* glass = argv[3];
-	int age_int = (int)age;//取整
+	// int age_int = (int)age;//取整
 	
 	const char* session_begin_params = "engine_type = purextts,voice_name=xiaoyan, text_encoding = UTF8, tts_res_path = fo|res/xtts/xiaoyan.jet;fo|res/xtts/common.jet, sample_rate = 16000, speed = 50, volume = 100, pitch = 50, rdn = 0";
 	const char* filename             = "reminder.wav"; //合成的语音文件名称
