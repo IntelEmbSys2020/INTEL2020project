@@ -5,7 +5,7 @@ e-mail：2373180028@qq.com
 '''
 
 import socket
-
+import time
 
 class P2P:
     """
@@ -70,14 +70,23 @@ class P2P:
         self.terminal_UDPport = int.from_bytes(recvData,byteorder='little',signed=True)
         print("从服务器接收到作业端UDP通信端口：%d"%self.terminal_UDPport)
         #本地穿透
-        self.socket_UDP.sendto(      AppID.to_bytes(length = 4,
-                                                                            byteorder = 'little',
-                                                                            signed = True),
-                                                                            (self.terminal_IPv4,self.terminal_UDPport))
+        # self.socket_UDP.sendto(      AppID.to_bytes(length = 4,
+        #                                                                     byteorder = 'little',
+        #                                                                     signed = True),
+        #                                                                     (self.terminal_IPv4,self.terminal_UDPport))
+        time.sleep(5)
         #接收作业端的握手消息
+        print("开始接受作业端测试数据")
         i = 0
         while i<5:
             i += 1
+            #发送一个穿透维持包，华中大校园网NAT太严格了！
+            print("向作业端发送第"+str(i)+"次测试请求")
+            self.socket_UDP.sendto(      AppID.to_bytes(length = 4,
+                                                            byteorder = 'little',
+                                                            signed = True),
+                                                            (self.terminal_IPv4,self.terminal_UDPport))
+        
             recvData,recvAddr = self.socket_UDP.recvfrom(4)
             recvData = int.from_bytes(recvData,byteorder='little',signed=True)
             print("接收作业端UDP握手消息：%d"%recvData)
@@ -85,6 +94,7 @@ class P2P:
                 print("作业端传来的ID ERROR!")
                 return
             print("穿透成功,测试数据包：%d"%i)
+            
         #反馈成功信息给服务器
         self.socket_TCP.send(self.__TCPcommand["P2P_OK"].to_bytes(
                                                                                                                                 length = 4,
