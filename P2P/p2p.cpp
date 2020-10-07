@@ -173,6 +173,7 @@ bool P2P_Init(p2p * target)
                                         sizeof(target->port_station_UDP),0);
         if(recvRet == -1 )
             return false;
+        target->addr_send.sin_port = target->port_station_UDP;
 
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
