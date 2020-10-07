@@ -4,6 +4,8 @@
 #include <iostream>
 #include <unistd.h>
 #include "myThread.hpp"
+#include "cameraGetImage/cameraGetImage.h"
+#include "../P2P/p2p.hpp"
 using namespace std;
 
 #define NUM_THREADS 2
@@ -54,7 +56,7 @@ int main()
     td1.buffer = &img;
     td1.cam_target = &camObj;
     td1.p2p_target = &p2pObj;
-    td1.data = nullptr;
+    td1.data = NULL;
     td1.dataLength = 0;
     //参数依次是：创建的线程id，线程参数，调用的函数，传入的函数参数
     rc1 = pthread_create(&threads[0], NULL,
@@ -68,10 +70,10 @@ int main()
 
     /*enter the 2nd thread
     *capture and send the img to the client.*/
-    td2.buffer = nullptr;
-    td2.cam_target = nullptr;
+    td2.buffer = NULL;
+    td2.cam_target = NULL;
     td2.p2p_target = &p2pObj;
-    td2.data = nullptr;
+    td2.data = NULL;
     td2.dataLength = 0;
 
     //参数依次是：创建的线程id，线程参数，调用的函数，传入的函数参数

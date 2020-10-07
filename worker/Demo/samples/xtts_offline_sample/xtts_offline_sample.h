@@ -21,24 +21,6 @@ typedef struct _wave_pcm_hdr
 	int				data_size;              // = 纯数据长度 : FileSize - 44 
 } wave_pcm_hdr;
 
-/* 默认wav音频头部数据 */
-wave_pcm_hdr default_wav_hdr = 
-{
-	{ 'R', 'I', 'F', 'F' },
-	0,
-	{'W', 'A', 'V', 'E'},
-	{'f', 'm', 't', ' '},
-	16,
-	1,
-	1,
-	16000,
-	32000,
-	2,
-	16,
-	{'d', 'a', 't', 'a'},
-	0  
-};
-
 /* 文本合成 */
 int text_to_speech(const char* src_text, const char* des_path, const char* params);
 int gen_voice(float age, char* gender, char* glass);
