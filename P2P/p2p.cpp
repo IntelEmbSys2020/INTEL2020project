@@ -143,12 +143,19 @@ bool P2P_Init(p2p * target)
                                                 0,  //flag
                                                 (struct sockaddr *)&(target->addr_send),    //发送服务器
                                                 sizeof(target->addr_send));
-
+        
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
         std::cout<<"terminal UDP send AppID:"<< target->APP_ID << " success!"<<std::endl;
+        std::cout<<"等待服务器UDP响应"<<std::endl;
         #endif
         /*****************调试辅助打印(END)********************/
+        recvRet = recvfrom(target->socket_UDP,&recvAppID,sizeof(recvAppID),0,
+                            (sockaddr *)&(target->addr_recv),(socklen_t *)&(addrLength));
+        memcpy(&(target->addrCache),&(target->addr_recv.sin_addr.s_addr),4);
+        // strcpy(target->IPv4_station,inet_ntoa(target->addrCache));
+        std::cout<<"接受到响应，IP："<<inet_ntoa(target->addrCache)
+            <<".端口："<<target->addr_recv.sin_port<<std::endl;
 
         do  //等待服务器指示测试穿透目标IP字符串
         {
@@ -441,6 +448,12 @@ bool P2P_Init(p2p * target)
         {
             return false;
         }
+        //回传一个数据，看看作业端能收到不
+        target->addr_send.sin_addr.s_addr = inet_addr(target->IPv4_terminal);
+        target->addr_send.sin_port = target->port_terminal_UDP;
+        sendto(target->socket_UDP,&recvAppID,sizeof(recvAppID),0,
+                (sockaddr *)&(target->addr_send),sizeof(target->addr_send));
+        
                 
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
