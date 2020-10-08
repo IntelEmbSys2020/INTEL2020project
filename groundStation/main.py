@@ -8,16 +8,16 @@ Author:cyl
 '''
 import sys
 import socket
-from p2p import *
 import cv2
 from dataTransform import *
 from recvImg import *
 from faceDetect.tensorflow_infer import *
-
+sys.path.append('../')
+from P2P_transfer.p2p_station import *
 
 print("地面站开始工作")
 '''create p2p'''
-communicater  = P2P()
+communicater  = P2P_Station()
 
 '''enter loop'''
 num = 1
