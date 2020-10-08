@@ -37,7 +37,7 @@ class P2P_Station:
         print("服务器握手成功（TCP）")
         #连接UDP服务器
         print("开始向UDP服务器做内网穿透")
-        self.socket_UDP.sendto(AppIDto_bytes(length = 4,
+        self.socket_UDP.sendto(AppID.to_bytes(length = 4,
                                             byteorder = 'little',
                                             signed = True),
                                 (self.IPv4_server_UDP,self.port_server_UDP))
