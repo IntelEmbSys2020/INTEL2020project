@@ -19,14 +19,17 @@ class p2p_UDPserver:
         recvAppID = int.from_bytes(recvData,byteorder='little',signed=True)
         print("接收到地面站ID：%d"%recvAppID)
         #先等待作业端连接
-        print("等待作业端连接")
-        recvData,recvAddr = self.socket_UDP.recvfrom(4)
-        self.socket_UDP.sendto(self.AppID.to_bytes(length = 4,
-                                                    byteorder = 'little',
-                                                    signed = True)
-                                ,recvAddr)
-        recvAppID = int.from_bytes(recvData,byteorder='little',signed=True)
-        print("接收到地面站ID：%d"%recvAppID)
+        i = 0
+        while i<5:
+            i += 1
+            print("等待作业端第"+str(i)+"次连接")
+            recvData,recvAddr = self.socket_UDP.recvfrom(4)
+            self.socket_UDP.sendto(self.AppID.to_bytes(length = 4,
+                                                        byteorder = 'little',
+                                                        signed = True)
+                                    ,recvAddr)
+            recvAppID = int.from_bytes(recvData,byteorder='little',signed=True)
+            print("接收到地面站ID：%d"%recvAppID)
         #穿透完成
         return
     
