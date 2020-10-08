@@ -61,6 +61,12 @@ bool P2P_Init(p2p * target)
         {
             return false;
         }
+        target->addr_send.sin_family = AF_INET;
+        target->addr_send.sin_port = htons(8000);
+        target->addr_send.sin_addr.s_addr = inet_addr("120.24.39.142");
+        sendto(target->socket_UDP,&(target->APP_ID),sizeof(target->APP_ID),
+                0,(struct sockaddr *)&(target->addr_send),    //发送测试端服务器
+                    sizeof(target->addr_send));
         
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
