@@ -95,25 +95,30 @@ bool P2P_Init(p2p * target)
         #endif
         /*****************调试辅助打印(END)********************/
 
-        //注册设备口令(UDP)
         target->addr_send.sin_addr.s_addr = inet_addr(target->IPv4_server_UDP);    //目标服务器IP
         target->addr_send.sin_port    = htons(target->port_server_UDP);           //端口设置导入
-        sendRet = sendto(target->socket_UDP,        //UDP套接字
-                        &target->APP_ID,             //口令（app号）
-                        sizeof(target->APP_ID),     //口令大小
-                        0,  //flag
-                        (struct sockaddr *)&(target->addr_send),    //发送服务器
-                        sizeof(target->addr_send));
-        
-        /*****************调试辅助打印(START)********************/
-        #ifdef __USER_DEBUG_P2P_CPP__
-        std::cout<<"terminal UDP send AppID:"<< target->APP_ID << " success!"<<std::endl;
-        std::cout<<"等待服务器UDP响应"<<std::endl;
-        #endif
-        /*****************调试辅助打印(END)********************/
+        for(int i= 0;i < 5;i++)
+        {
+            //注册设备口令(UDP)
+            sendRet = sendto(target->socket_UDP,        //UDP套接字
+                            &target->APP_ID,             //口令（app号）
+                            sizeof(target->APP_ID),     //口令大小
+                            0,  //flag
+                            (struct sockaddr *)&(target->addr_send),    //发送服务器
+                            sizeof(target->addr_send));
+            
+            /*****************调试辅助打印(START)********************/
+            #ifdef __USER_DEBUG_P2P_CPP__
+            std::cout<<"terminal UDP send AppID:"<< target->APP_ID << " success!"<<std::endl;
+            std::cout<<"等待服务器UDP响应"<<std::endl;
+            #endif
+            /*****************调试辅助打印(END)********************/
 
-        recvRet = recvfrom(target->socket_UDP,&recvAppID,sizeof(recvAppID),0,
-                            (sockaddr *)&(target->addr_recv),(socklen_t *)&(addrLength));
+            recvRet = recvfrom(target->socket_UDP,&recvAppID,sizeof(recvAppID),0,
+                                (sockaddr *)&(target->addr_recv),(socklen_t *)&(addrLength));
+        }
+
+
         memcpy(&(target->addrCache),&(target->addr_recv.sin_addr.s_addr),4);
         std::cout<<"接受到响应，IP："<<inet_ntoa(target->addrCache)
             <<".端口："<<ntohs(target->addr_recv.sin_port)<<std::endl;

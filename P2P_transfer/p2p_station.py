@@ -62,8 +62,8 @@ class P2P_Station:
         return
 
     def P2P_recvData(self,prefSize):
-        self.P2P_sendData(bytes(1))
-        return self.socket_UDP.recvfrom(prefSize)
+        data,addr = self.socket_UDP.recvfrom(prefSize)
+        return data
 
     def P2P_recvCMD(self,prefSize):
         return self.socket_TCP.recv(prefSize)

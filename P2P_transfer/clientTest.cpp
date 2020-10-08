@@ -11,4 +11,15 @@ int main(void)
     communicator.port_server_UDP = 8001;
     
     P2P_Init(&communicator);
+
+    char msg[] = "INTEL2020";
+    std::cout<<"按一次按键对地面站发送一次数据"<<std::endl;
+    while (true)
+    {
+        getchar();
+        P2P_sendData(&communicator,msg,sizeof(msg));
+        std::cout<<"发送一次消息"<<std::endl;
+    }
+    
+
 }
