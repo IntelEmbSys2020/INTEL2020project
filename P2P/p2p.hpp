@@ -42,16 +42,16 @@ struct p2p
     deviceType localType;
     //作业端IP和端口
     char IPv4_terminal[16];
-    in_port_t port_terminal_TCP;
-    in_port_t port_terminal_UDP;
+    int port_terminal_TCP;
+    int port_terminal_UDP;
     //服务器IP和端口
     char IPv4_server[100];
-    in_port_t port_server_TCP;
-    in_port_t port_server_UDP;
+    int port_server_TCP;
+    int port_server_UDP;
     //总站IP和端口
     char IPv4_station[16];
-    in_port_t port_station_TCP;
-    in_port_t port_station_UDP;
+    int port_station_TCP;
+    int port_station_UDP;
 
     //命令传输TCP套接字
     int socket_TCP_local;

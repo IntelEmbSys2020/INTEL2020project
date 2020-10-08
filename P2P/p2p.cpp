@@ -181,7 +181,7 @@ bool P2P_Init(p2p * target)
                                         sizeof(target->port_station_UDP),0);
         if(recvRet == -1 )
             return false;
-        target->addr_send.sin_port = target->port_station_UDP;
+        target->addr_send.sin_port = htons(target->port_station_UDP);
 
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
@@ -388,7 +388,7 @@ bool P2P_Init(p2p * target)
                     continue;   //校验数据是否来自地面站IP
                 }
         }while(0);
-        target->port_station_UDP = target->addr_recv.sin_port;
+        target->port_station_UDP = ntohs(target->addr_recv.sin_port);
 
         //校验口令
         if(recvAppID != target->APP_ID)
@@ -396,7 +396,7 @@ bool P2P_Init(p2p * target)
 
         //回传一个数据，看看地面站能收到不
         target->addr_send.sin_addr.s_addr = inet_addr(target->IPv4_station);
-        target->addr_send.sin_port = target->port_station_UDP;
+        target->addr_send.sin_port = htons(target->port_station_UDP);
         sendto(target->socket_UDP,&recvAppID,sizeof(recvAppID),0,
                 (sockaddr *)&(target->addr_send),sizeof(target->addr_send));
         
@@ -440,7 +440,7 @@ bool P2P_Init(p2p * target)
                     continue;   //校验数据是否来自作业端IP
                 }
         }while(0);
-        target->port_terminal_UDP = target->addr_recv.sin_port;
+        target->port_terminal_UDP = ntohs(target->addr_recv.sin_port);
 
 
         //校验口令
@@ -450,7 +450,7 @@ bool P2P_Init(p2p * target)
         }
         //回传一个数据，看看作业端能收到不
         target->addr_send.sin_addr.s_addr = inet_addr(target->IPv4_terminal);
-        target->addr_send.sin_port = target->port_terminal_UDP;
+        target->addr_send.sin_port = htons(target->port_terminal_UDP);
         sendto(target->socket_UDP,&recvAppID,sizeof(recvAppID),0,
                 (sockaddr *)&(target->addr_send),sizeof(target->addr_send));
         
@@ -506,9 +506,9 @@ bool P2P_Init(p2p * target)
         sleep(1);   //隔1s后发，防止包错误连接
 
         //发送作业端UDP端口号给地面站
-        intCache = target->port_terminal_UDP;
         sendRet = send(target->socket_TCP_ConnectStation,
-                                                &(intCache),sizeof(intCache),
+                                                &(target->port_terminal_UDP),
+                                                sizeof(target->port_terminal_UDP),
                                                 0);
 
         /*****************调试辅助打印(START)********************/
