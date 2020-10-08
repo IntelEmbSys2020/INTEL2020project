@@ -11,7 +11,7 @@ class p2p_UDPserver:
         self.socket_UDP.bind((str(socket.INADDR_ANY),local_port))
         #先等待地面连接
         print("等待地面站连接")
-        recvData,recvAddr = self.socket_UDP.recvrfrom(4)
+        recvData,recvAddr = self.socket_UDP.recvfrom(4)
         self.socket_UDP.sendto(self.AppID.to_bytes(length = 4,
                                                     byteorder = 'little',
                                                     signed = True)
