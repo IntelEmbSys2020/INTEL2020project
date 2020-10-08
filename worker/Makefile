@@ -13,8 +13,9 @@ DIR_BIN = ./Demo/bin
 DIR_LIB = ./Demo/libs
 # DIR_LIB = /usr/lib 
 
-TARGET	= xtts_offline_sample
-BIN_TARGET = $(DIR_BIN)/$(TARGET)  
+TARGET	= workerTest
+# BIN_TARGET = $(DIR_BIN)/$(TARGET)  
+BIN_TARGET = ./workerTest
 
 CROSS_COMPILE = 
 CFLAGS = -g -Wall -I$(DIR_INC)

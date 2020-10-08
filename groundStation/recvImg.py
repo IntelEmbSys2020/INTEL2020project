@@ -10,10 +10,7 @@ from P2P_transfer.p2p_station import *
 def recvImg(num, communicater):
     #注意！要在服务器的安全组中开放相应的进出口！
     MAX_LEN = 60000
-
-    data,client_addr = communicater.P2P_recvData(10)#接收图像数据长度
-    imgLength = bytes2int(data)#图像数据长度从bytes->int
-    # print("image Length value is %d"%imgLength)
+    imgLength = 3932214
 
     #创建本地图像文件
     path='../Img/img'+num+'.bmp'

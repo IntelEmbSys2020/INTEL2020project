@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include "myThread.hpp"
 #include "cameraGetImage/cameraGetImage.h"
-#include "../P2P/p2p.hpp"
+#include "../P2P_transfer/p2p.hpp"
 using namespace std;
 
 #define NUM_THREADS 2

@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/home/tong/c_program/landmarkdetect/build",
+  "command": "/usr/bin/g++-5   -Ddetect_final_EXPORTS -isystem /usr/local/include/opencv4  -std=c++11 -g -fPIC   -o CMakeFiles/detect_final.dir/final.cpp.o -c /home/tong/c_program/landmarkdetect/final.cpp",
+  "file": "/home/tong/c_program/landmarkdetect/final.cpp"
+},
+{
+  "directory": "/home/tong/c_program/landmarkdetect/build",
+  "command": "/usr/bin/g++-5   -Ddetect_final_EXPORTS -isystem /usr/local/include/opencv4  -std=c++11 -g -fPIC   -o CMakeFiles/detect_final.dir/detection.cpp.o -c /home/tong/c_program/landmarkdetect/detection.cpp",
+  "file": "/home/tong/c_program/landmarkdetect/detection.cpp"
+},
+{
+  "directory": "/home/tong/c_program/landmarkdetect/build",
+  "command": "/usr/bin/g++-5   -Ddetect_final_EXPORTS -isystem /usr/local/include/opencv4  -std=c++11 -g -fPIC   -o CMakeFiles/detect_final.dir/estimate.cpp.o -c /home/tong/c_program/landmarkdetect/estimate.cpp",
+  "file": "/home/tong/c_program/landmarkdetect/estimate.cpp"
+}
+]
