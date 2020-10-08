@@ -153,7 +153,6 @@ bool P2P_Init(p2p * target)
         recvRet = recvfrom(target->socket_UDP,&recvAppID,sizeof(recvAppID),0,
                             (sockaddr *)&(target->addr_recv),(socklen_t *)&(addrLength));
         memcpy(&(target->addrCache),&(target->addr_recv.sin_addr.s_addr),4);
-        // strcpy(target->IPv4_station,inet_ntoa(target->addrCache));
         std::cout<<"接受到响应，IP："<<inet_ntoa(target->addrCache)
             <<".端口："<<ntohs(target->addr_recv.sin_port)<<std::endl;
 
@@ -208,6 +207,7 @@ bool P2P_Init(p2p * target)
         recvAppID = target->APP_ID;
         for(int i = 0;i<5;i++)  //总尝试5次
         {
+            std::cout<<"try:"<<i<<std::endl;
             recvRet = recvfrom(target->socket_UDP,  //接收地面站的穿透消息
                                                     &recvAppID,sizeof(recvAppID),
                                                     0,
@@ -514,7 +514,7 @@ bool P2P_Init(p2p * target)
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
         std::cout<<"server send port of terminal to STATION success!"<<std::endl;
-        std::cout<<"port of terminal is : "<<intCache<<std::endl;
+        std::cout<<"port of terminal is : "<<target->port_terminal_UDP<<std::endl;
         #endif
         /*****************调试辅助打印(END)********************/
 
