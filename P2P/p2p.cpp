@@ -155,7 +155,7 @@ bool P2P_Init(p2p * target)
         memcpy(&(target->addrCache),&(target->addr_recv.sin_addr.s_addr),4);
         // strcpy(target->IPv4_station,inet_ntoa(target->addrCache));
         std::cout<<"接受到响应，IP："<<inet_ntoa(target->addrCache)
-            <<".端口："<<target->addr_recv.sin_port<<std::endl;
+            <<".端口："<<ntohs(target->addr_recv.sin_port)<<std::endl;
 
         do  //等待服务器指示测试穿透目标IP字符串
         {
