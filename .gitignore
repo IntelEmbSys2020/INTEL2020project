@@ -1,3 +1,4 @@
 worker/ImageProcess/build
 *.bmp
 test/build/*
+P2P_transfer/build/*
