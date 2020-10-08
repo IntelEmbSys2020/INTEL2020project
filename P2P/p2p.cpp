@@ -75,6 +75,7 @@ bool P2P_Init(p2p * target)
         /*****************调试辅助打印(END)********************/
 
         //TCP套接字绑定端口
+        target->addr_send.sin_addr.s_addr = htonl(INADDR_ANY);
         target->addr_send.sin_port = htons(target->port_terminal_TCP);
         if(bind(  target->socket_TCP_local,
                             (struct sockaddr *)&(target->addr_send),
