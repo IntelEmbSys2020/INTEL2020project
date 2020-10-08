@@ -66,7 +66,7 @@ class P2P:
         self.terminal_IPv4 = recvData.decode('utf-8')
         print("从服务器接收到作业端公网IP：%s"%self.terminal_IPv4)
         #接收作业端UDP端口（TCP）
-        recvData = self.socket_TCP.recv(4)
+        recvData = self.socket_TCP.recv(2)
         self.terminal_UDPport = int.from_bytes(recvData,byteorder='little',signed=True)
         print("从服务器接收到作业端UDP通信端口：%d"%self.terminal_UDPport)
         #本地穿透

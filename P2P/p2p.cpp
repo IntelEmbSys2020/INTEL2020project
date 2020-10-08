@@ -37,7 +37,7 @@ bool P2P_Init(p2p * target)
 
         //首先创建UDP和TCP套接字
         target->socket_UDP  = socket(AF_INET,SOCK_DGRAM,0);
-        target->socket_TCP_local = socket(PF_INET,SOCK_STREAM,0);
+        target->socket_TCP_local = socket(AF_INET,SOCK_STREAM,0);
         if(target->socket_UDP == -1 || target->socket_TCP_local == -1)
         {
             return false;
@@ -123,17 +123,17 @@ bool P2P_Init(p2p * target)
             recvRet = recv(target->socket_TCP_local,&ctrlMsg,sizeof(ctrlMsg),0);
             if(recvRet == -1 )
                 return false;
-            if(ctrlMsg == P2P_begin)    //校验开始指令
+            if(ctrlMsg != P2P_begin)    //校验开始指令
                 continue;
         } while (0);
         
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
-        std::cout<<"terminal get server CMD : begin make hole!"<<std::endl;
+        std::cout<<"terminal get server CMD : P2P begin!"<<std::endl;
         #endif
         /*****************调试辅助打印(END)********************/
 
-        //注册设备口令
+        //注册设备口令(UDP)
         target->addr_send.sin_addr.s_addr = inet_addr(target->IPv4_server);    //目标服务器IP
         target->addr_send.sin_port    = htons(target->port_server_UDP);           //端口设置导入
         sendRet = sendto(target->socket_UDP,        //UDP套接字
@@ -167,7 +167,7 @@ bool P2P_Init(p2p * target)
         #endif
         /*****************调试辅助打印(END)********************/
 
-        //等待服务器指示测试穿透目标端口
+        //等待服务器指示测试穿透目标的UDP端口
         recvRet = recv(target->socket_TCP_local,
                                         &(target->port_station_UDP),
                                         sizeof(target->port_station_UDP),0);
@@ -178,7 +178,9 @@ bool P2P_Init(p2p * target)
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
         std::cout<<"terminal get target UDP port success! port:"
-                <<target->port_station_UDP<<std::endl;
+                <<target->port_station_UDP
+                <<". Size is: "<<sizeof(target->port_station_UDP)
+                <<std::endl;
         #endif
         /*****************调试辅助打印(END)********************/
 
@@ -194,7 +196,7 @@ bool P2P_Init(p2p * target)
         #endif
         /*****************调试辅助打印(END)********************/
 
-        //对地面站发送穿透尝试消息
+        //对地面站互相UDP握手发送穿透尝试消息
         recvAppID = target->APP_ID;
         for(int i = 0;i<5;i++)  //总尝试5次
         {
@@ -248,7 +250,7 @@ bool P2P_Init(p2p * target)
         /*****************调试辅助打印(END)********************/
 
         //先创建socket
-        target->socket_TCP_local = socket(PF_INET,SOCK_STREAM,0);
+        target->socket_TCP_local = socket(AF_INET,SOCK_STREAM,0);
         target->socket_UDP = socket(AF_INET,SOCK_DGRAM,0);
         if(target->socket_UDP == -1 || target->socket_TCP_local == -1)
         {
@@ -361,16 +363,23 @@ bool P2P_Init(p2p * target)
         /*****************调试辅助打印(END)********************/
 
         //接收地面站发来的口令
-        recvRet = recvfrom(target->socket_UDP,
+        do{
+                recvRet = recvfrom(target->socket_UDP,
                                                     &recvAppID,
                                                     sizeof(recvAppID),
                                                     0,
                                                     (sockaddr *)&(target->addr_recv),
                                                     (socklen_t *)&addrLength);
-        if(recvRet == -1)
-        {
-            return false;
-        }
+                if(recvRet == -1)
+                {
+                    return false;
+                }
+                if(target->addr_recv.sin_addr.s_addr != inet_addr(target->IPv4_station))
+                {
+                    std::cout<<"收到一次非地面站口令"<<std::endl;
+                    continue;   //校验数据是否来自地面站IP
+                }
+        }while(0);
         target->port_station_UDP = target->addr_recv.sin_port;
 
         //校验口令
@@ -399,16 +408,23 @@ bool P2P_Init(p2p * target)
         /*****************调试辅助打印(END)********************/
 
         //接收作业端发来的口令
-        recvRet = recvfrom(target->socket_UDP,
+        do{
+                recvRet = recvfrom(target->socket_UDP,
                                                     &recvAppID,
                                                     sizeof(recvAppID),
                                                     0,
                                                     (sockaddr *)&(target->addr_recv),
                                                     (socklen_t *)&addrLength);
-        if(recvRet == -1)
-        {
-            return false;
-        }
+                if(recvRet == -1)
+                {
+                    return false;
+                }
+                if(target->addr_recv.sin_addr.s_addr != inet_addr(target->IPv4_terminal))
+                {
+                    std::cout<<"收到一次非作业端口令"<<std::endl;
+                    continue;   //校验数据是否来自作业端IP
+                }
+        }while(0);
         target->port_terminal_UDP = target->addr_recv.sin_port;
 
 
@@ -439,7 +455,8 @@ bool P2P_Init(p2p * target)
         #endif
         /*****************调试辅助打印(END)********************/
 
-        sleep(5);
+        sleep(1);   //隔1s后发，防止包错误连接
+
         //发送地面站UDP端口号给作业端
         sendRet = send(target->socket_TCP_ConnectTerminal,
                                                 &(target->port_station_UDP),sizeof(target->port_station_UDP),
@@ -465,6 +482,8 @@ bool P2P_Init(p2p * target)
         #endif
         /*****************调试辅助打印(END)********************/
 
+        sleep(1);   //隔1s后发，防止包错误连接
+
         //发送作业端UDP端口号给地面站
         sendRet = send(target->socket_TCP_ConnectStation,
                                                 &(target->port_terminal_UDP),sizeof(target->port_terminal_UDP),
@@ -477,7 +496,7 @@ bool P2P_Init(p2p * target)
         #endif
         /*****************调试辅助打印(END)********************/
 
-        //接收成功打洞信号
+        //接收地面站的成功打洞信号
         recvRet = recv(target->socket_TCP_ConnectStation,
                                     &(ctrlMsg),sizeof(ctrlMsg),0);
 
