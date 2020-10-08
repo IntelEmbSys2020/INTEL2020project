@@ -47,3 +47,18 @@ class P2P_Station:
         print("收到穿透响应，ID：%d",recvAppID)
         #穿透结束
         return
+
+    def P2P_sendData(self,data):
+        self.socket_UDP.sendto( data,(self.IPv4_server_UDP,self.port_server_UDP))
+        return
+    
+    def P2P_sendCMD(self,cmd):
+        self.socket_TCP.send(cmd)
+        return
+
+    def P2P_recvData(self,prefSize):
+        self.P2P_sendData(bytes(1))
+        return self.socket_UDP.recvfrom(prefSize)
+
+    def P2P_recvCMD(self,prefSize):
+        return self.socket_TCP.recv(prefSize)

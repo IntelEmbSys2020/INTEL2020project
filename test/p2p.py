@@ -53,9 +53,9 @@ class P2P:
         print("开始内网穿透...")
         #发送（注册）口令（UDP）
         self.socket_UDP.sendto(     AppID.to_bytes(length = 4,
-                                                                            byteorder = 'little',
-                                                                            signed = True),
-                                                                            (server_IPv4,server_UDPport))
+                                                    byteorder = 'little',
+                                                    signed = True),
+                                                    (server_IPv4,server_UDPport))
         print("口令注册，等待服务器UDP响应")
         recvData,recvAddr = self.socket_UDP.recvfrom(4)
         print("收到服务器响应，地址：%s:%d"%recvAddr)
