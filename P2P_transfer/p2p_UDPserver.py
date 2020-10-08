@@ -20,7 +20,7 @@ class p2p_UDPserver:
         print("接收到地面站ID：%d"%recvAppID)
         #先等待作业端连接
         print("等待作业端连接")
-        recvData,recvAddr = self.socket_UDP.recvrfrom(4)
+        recvData,recvAddr = self.socket_UDP.recvfrom(4)
         self.socket_UDP.sendto(self.AppID.to_bytes(length = 4,
                                                     byteorder = 'little',
                                                     signed = True)
