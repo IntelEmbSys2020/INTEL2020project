@@ -59,14 +59,14 @@ void *tts(void *threadarg)
     void *data = my_data->data;
     size_t dataLength = my_data->dataLength;
 
-    float age;
+    int age;
     char* gender;
     char* glass;
     //enter the forever loop
     while(1){
         //receive the data
         //receive age
-        if(P2P_recvData(target, &age, sizeof(float))==sizeof(float))
+        if(P2P_recvData(target, &age, sizeof(int))==sizeof(int))
         {
             printf("the age data hasn't been received.\n");
         }

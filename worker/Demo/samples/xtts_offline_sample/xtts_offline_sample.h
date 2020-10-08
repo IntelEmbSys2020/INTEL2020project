@@ -23,5 +23,5 @@ typedef struct _wave_pcm_hdr
 
 /* 文本合成 */
 int text_to_speech(const char* src_text, const char* des_path, const char* params);
-int gen_voice(float age, char* gender, char* glass);
+int gen_voice(int age_int, char* gender, char* glass);
 #endif // tts
