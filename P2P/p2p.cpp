@@ -485,14 +485,15 @@ bool P2P_Init(p2p * target)
         sleep(1);   //隔1s后发，防止包错误连接
 
         //发送作业端UDP端口号给地面站
+        int intCache = target->port_terminal_UDP;
         sendRet = send(target->socket_TCP_ConnectStation,
-                                                &(target->port_terminal_UDP),sizeof(target->port_terminal_UDP),
+                                                &(intCache),sizeof(intCache),
                                                 0);
 
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
         std::cout<<"server send port of terminal to STATION success!"<<std::endl;
-        std::cout<<"port of terminal is : "<<target->port_terminal_UDP<<std::endl;
+        std::cout<<"port of terminal is : "<<intCache<<std::endl;
         #endif
         /*****************调试辅助打印(END)********************/
 
@@ -503,6 +504,12 @@ bool P2P_Init(p2p * target)
         //把好消息告诉作业站
         sendRet = send(target->socket_TCP_ConnectTerminal,
                                     &(ctrlMsg),sizeof(ctrlMsg),0);
+
+        std::cout<<"msg from ground station is:";
+        if(ctrlMsg == P2P_OK)
+            std::cout<<"P2P_OK"<<std::endl;
+        else
+            std::cout<<"NOT OK"<<std::endl;
 
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__
