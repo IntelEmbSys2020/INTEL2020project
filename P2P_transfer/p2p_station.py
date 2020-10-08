@@ -48,7 +48,7 @@ class P2P_Station:
             print("等待服务器响应穿透")
             recvData,recvAddr = self.socket_UDP.recvfrom(4)
             recvAppID = int.from_bytes(recvData,byteorder='little',signed=True)
-            print("收到穿透响应，ID：%d",recvAppID)
+            print("收到穿透响应，ID：%d"%recvAppID)
             time.sleep(1)
         #穿透结束
         return

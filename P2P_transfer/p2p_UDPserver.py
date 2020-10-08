@@ -21,6 +21,7 @@ class p2p_UDPserver:
             i += 1
             print("等待地面站第"+str(i)+"次连接")
             recvData,recvAddr = self.socket_UDP.recvfrom(4)
+            print("地面站IP：%s，端口：%d"%recvAddr)
             self.socket_UDP.sendto(self.AppID.to_bytes(length = 4,
                                                         byteorder = 'little',
                                                         signed = True)
@@ -38,6 +39,7 @@ class p2p_UDPserver:
             i += 1
             print("等待作业端第"+str(i)+"次连接")
             recvData,recvAddr = self.socket_UDP.recvfrom(4)
+            print("作业端连接IP：%s，port：%d"%recvAddr)
             self.socket_UDP.sendto(self.AppID.to_bytes(length = 4,
                                                         byteorder = 'little',
                                                         signed = True)
@@ -63,6 +65,9 @@ class p2p_UDPserver:
         '''
         while True:
             data,recvAddr = self.socket_UDP.recvfrom(self.__MAX_UDP_PACKEGE_LENGTH) #监听数据
+            print("接受到数据")
             if(recvAddr != self.addrWorker):    #如果收到的数据不是作业端的
+                print("不是作业端数据")
                 continue        #忽略该信息包
+            print("发送数据给地面站")
             self.socket_UDP.sendto(data,self.addrGroundStation) #发给地面站

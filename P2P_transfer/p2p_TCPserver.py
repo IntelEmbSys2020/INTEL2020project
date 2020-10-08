@@ -37,6 +37,9 @@ class p2p_TCPserver:
         无脑转播
         方向：地面站->该服务器->作业端
         '''
-        data = self.socket_STATION.recv(__TCP_MAX_PACKAGE_LENGTH)   #收到地面消息
-        self.socket_WORKER.send(data)   #转发给作业端
+        while True:
+            data = self.socket_STATION.recv(self.__TCP_MAX_PACKAGE_LENGTH)   #收到地面消息
+            self.socket_WORKER.send(data)   #转发给作业端
+            print("transfer Once!")
+        
     
