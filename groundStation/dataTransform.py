@@ -11,3 +11,6 @@ def bool2charStar(b):
 
 def int2bytes(i):
     return i.to_bytes(1,byteorder='little', signed=False)
+
+def bytes2int(b):
+    return int.from_bytes(b,byteorder='little',signed=True)

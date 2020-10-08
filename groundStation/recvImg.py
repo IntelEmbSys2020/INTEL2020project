@@ -1,24 +1,19 @@
-import socket               # 导入 socket 模块
+import socket               
+import p2p
+from dataTransform import bytes2int
+#关于图像的数据传输用udp
 #传入的参数包括序号num可以作为存储图像的名称
-def recvImg(num):
+def recvImg(num, communicater):
     #注意！要在服务器的安全组中开放相应的进出口！
-    SERVER_PORT = 8000
     MAX_LEN = 60000
 
-    # s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)         # 创建 socket 对象
-    # server_addr = (str(socket.INADDR_ANY),SERVER_PORT) #服务器地址+端口
-
-    # s.bind(server_addr)         # 服务器启动！ 
-    # print('服务器启动！')
-
-    data,client_addr = s.recvfrom(10)   #接收图像数据长度
-
-    imgLength = int.from_bytes(data,byteorder='little',signed=True)
-
+    data,client_addr = communicater.P2P_recvData(10)#接收图像数据长度
+    imgLength = bytes2int(data)#图像数据长度从bytes->int
     # print("image Length value is %d"%imgLength)
 
     #创建本地图像文件
-    imgLocalFile = open("serverImg4Py.bmp",mode = 'wb')
+    path='../Img/img'+num+'.bmp'
+    imgLocalFile = open(path,mode = 'wb')
 
     #求解需要接收的图像数据包的个数
     packNum = imgLength / MAX_LEN
@@ -28,18 +23,18 @@ def recvImg(num):
     packNow = 0
     while packNow < packNum:
         #接收数据
-        data,client_addr = s.recvfrom(MAX_LEN)
+        data,client_addr = communicater.P2P_recvData(MAX_LEN)
         #写图文件
         imgLocalFile.write(data)
         #接收反馈
-        s.sendto(packNow.to_bytes(length = 4,byteorder = 'little',signed = True),client_addr)
-
+        communicater.P2P_sendData(packNow.to_bytes(length = 4,byteorder = 'little',signed = True),client_addr)
         packNow += 1
 
-    #读取数据
-    data,client_addr = s.recvfrom(remain)
-
+    #最后一次读取数据
+    data,client_addr = communicater.P2P_recvData(remain)
+    #最后一次写图文件
     imgLocalFile.write(data)
 
     #关闭文件
     imgLocalFile.close()
+    return path

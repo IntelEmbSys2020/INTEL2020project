@@ -11,8 +11,8 @@ import socket
 from p2p import *
 import cv2
 from dataTransform import *
-sys.path.append("..")
-import faceDetect.tensorflow_infer
+from recvImg import *
+from faceDetect.tensorflow_infer import *
 
 
 print("地面站开始工作")
@@ -20,12 +20,14 @@ print("地面站开始工作")
 communicater  = P2P()
 
 '''enter loop'''
+num = 1
 while True:
     '''receive img'''
-    communicater.P2P_recvData(dataSize)
+    imgPath = recvImg(num, communicater)
+    img = cv2.imread(imgPath, cv2.IMREAD_COLOR)
 
     '''process img'''
-    age,gender,glasses = tensorflow_infer.run_on_img(img, conf_thresh=0.7)
+    age,gender,glasses = run_on_img(img, conf_thresh=0.7)
     #the return are int, str, bool
     #turn the info towards bytes
     bGender = str2bytes(gender)
@@ -39,6 +41,6 @@ while True:
     communicater.P2P_sendData(bAge)
     communicater.P2P_sendData(bGender)
     communicater.P2P_sendData(bGlasses)    
-
+    num += 1
 
 print("地面站结束")
