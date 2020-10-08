@@ -386,6 +386,13 @@ bool P2P_Init(p2p * target)
         //校验口令
         if(recvAppID != target->APP_ID)
             return false;
+
+        //回传一个数据，看看地面站能收到不
+        target->addr_send.sin_addr.s_addr = inet_addr(target->IPv4_station);
+        target->addr_send.sin_port = target->port_station_UDP;
+        sendto(target->socket_UDP,&recvAppID,sizeof(recvAppID),0,
+                (sockaddr *)&(target->addr_send),sizeof(target->addr_send));
+        
                                 
         /*****************调试辅助打印(START)********************/
         #ifdef __USER_DEBUG_P2P_CPP__

@@ -56,7 +56,9 @@ class P2P:
                                                                             byteorder = 'little',
                                                                             signed = True),
                                                                             (server_IPv4,server_UDPport))
-        print("口令注册")
+        print("口令注册，等待服务器UDP响应")
+        recvData,recvAddr = self.socket_UDP.recvfrom(4)
+        print("收到服务器响应，地址："+recvAddr)
         #等待接收作业端地址（TCP）
         print("等待服务器发送作业端IP...")
         recvData = self.socket_TCP.recv(16)
