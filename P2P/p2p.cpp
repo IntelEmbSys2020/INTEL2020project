@@ -15,6 +15,7 @@ bool P2P_Init(p2p * target)
     int recvRet;
     TCPcommand ctrlMsg;
     int recvAppID;
+    int intCache;
     auto addrLength = sizeof(target->addr_recv);
 
     memset(&(target->addr_send),0,sizeof(struct sockaddr_in));      //默认数据填充0
@@ -485,7 +486,7 @@ bool P2P_Init(p2p * target)
         sleep(1);   //隔1s后发，防止包错误连接
 
         //发送作业端UDP端口号给地面站
-        int intCache = target->port_terminal_UDP;
+        intCache = target->port_terminal_UDP;
         sendRet = send(target->socket_TCP_ConnectStation,
                                                 &(intCache),sizeof(intCache),
                                                 0);
