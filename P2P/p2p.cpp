@@ -215,15 +215,16 @@ bool P2P_Init(p2p * target)
         for(int i = 0;i<5;i++)  //总尝试5次
         {
             std::cout<<"try:"<<i<<std::endl;
-            recvRet = recvfrom(target->socket_UDP,  //接收地面站的穿透消息
-                                                    &recvAppID,sizeof(recvAppID),
-                                                    0,
-                                                    (sockaddr *)&(target->addr_recv),
-                                                    (socklen_t *)&addrLength);
+            // recvRet = recvfrom(target->socket_UDP,  //接收地面站的穿透消息
+            //                                         &recvAppID,sizeof(recvAppID),
+            //                                         0,
+            //                                         (sockaddr *)&(target->addr_recv),
+            //                                         (socklen_t *)&addrLength);
             sendRet = sendto(target->socket_UDP,    //对地面站发送穿透测试包
                                                 &(recvAppID+=1),sizeof(recvAppID),
                                                 0,
                                                 (sockaddr *)&(target->addr_send),sizeof(target->addr_send));
+            sleep(1);
         }
 
         /*****************调试辅助打印(START)********************/
