@@ -80,7 +80,8 @@ class P2P:
         #接收作业端的握手消息
         print("开始接受作业端测试数据")
         i = 0
-        while true:
+        self.socket_UDP.setblocking(0)
+        while True:
             i += 1
             #发送一个穿透维持包，华中大校园网NAT太严格了！
             print("向作业端发送第"+str(i)+"次测试请求")
@@ -89,8 +90,8 @@ class P2P:
                                                             signed = True),
                                                             (self.terminal_IPv4,self.terminal_UDPport))
             #不等待式的探测作业端消息
-            recvData,recvAddr = self.socket_UDP.recvfrom(4,socket.MSG_DONTWAIT)
-            if(len(recvData) != 0)
+            recvData,recvAddr = self.socket_UDP.recvfrom(4)
+            if(len(recvData) != 0):
                 recvData = int.from_bytes(recvData,byteorder='little',signed=True)
                 print("接收作业端UDP握手消息：%d"%recvData)
                 # if(recvData != self.AppID + i -1):
@@ -98,12 +99,13 @@ class P2P:
                 #     return
                 print("穿透成功,测试数据包：%d"%i)
                 break
+            time.sleep(0.1)
             
         #反馈成功信息给服务器
         self.socket_TCP.send(self.__TCPcommand["P2P_OK"].to_bytes(
-                                                                                                                                length = 4,
-                                                                                                                                byteorder = 'little',
-                                                                                                                                signed = True))
+                                                                length = 4,
+                                                                byteorder = 'little',
+                                                                signed = True))
         return
     
     def P2P_sendData(self,data):
