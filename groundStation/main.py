@@ -38,9 +38,9 @@ while True:
     '''send info
        worker recv it in order age, gender, glasses
     '''
-    communicater.P2P_sendData(bAge)
-    communicater.P2P_sendData(bGender)
-    communicater.P2P_sendData(bGlasses)    
+    communicater.P2P_sendCMD(bAge)
+    communicater.P2P_sendCMD(bGender)
+    communicater.P2P_sendCMD(bGlasses)    
     num += 1
 
 print("地面站结束")

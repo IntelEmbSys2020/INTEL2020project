@@ -1,6 +1,10 @@
 import socket               
-import p2p
+# import p2p
 from dataTransform import bytes2int
+import sys
+sys.path.append('../')
+from P2P_transfer.p2p_station import *
+
 #关于图像的数据传输用udp
 #传入的参数包括序号num可以作为存储图像的名称
 def recvImg(num, communicater):
