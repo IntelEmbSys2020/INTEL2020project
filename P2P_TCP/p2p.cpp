@@ -17,7 +17,7 @@ bool P2P_Init(p2p * target)
     switch (target->localType)
     {
     case TERMINAL:
-        target->socket_UDP = socket(AF_INET,SOCK_DGRAM,0);
+        // target->socket_UDP = socket(AF_INET,SOCK_DGRAM,0);
         target->socket_TCP = socket(AF_INET,SOCK_STREAM,0);
         if(target->socket_UDP == -1 || target->socket_TCP == -1)
         {
@@ -30,22 +30,22 @@ bool P2P_Init(p2p * target)
         #endif
         /*****************调试辅助打印(END)********************/
 
-        //初始化UDP套接字，绑定端口
-        target->addr_send.sin_family = AF_INET;     //IPv4地址
-        target->addr_send.sin_addr.s_addr = htonl(INADDR_ANY);                  //任意对象
-        target->addr_send.sin_port = htons(target->port_server_UDP);  //本地开放端口
-        if( bind(   target->socket_UDP,
-                            (struct sockaddr *)&(target->addr_send),
-                            sizeof(target->addr_send)   ) 
-            < 0)
-        {
-            return false;
-        }
-        /*****************调试辅助打印(START)********************/
-        #ifdef __USER_DEBUG_P2P_CPP__
-        std::cout<<"UDP套接字绑定端口!"<<std::endl;
-        #endif
-        /*****************调试辅助打印(END)********************/
+        // //初始化UDP套接字，绑定端口
+        // target->addr_send.sin_family = AF_INET;     //IPv4地址
+        // target->addr_send.sin_addr.s_addr = htonl(INADDR_ANY);                  //任意对象
+        // target->addr_send.sin_port = htons(target->port_server_UDP);  //本地开放端口
+        // if( bind(   target->socket_UDP,
+        //                     (struct sockaddr *)&(target->addr_send),
+        //                     sizeof(target->addr_send)   ) 
+        //     < 0)
+        // {
+        //     return false;
+        // }
+        // /*****************调试辅助打印(START)********************/
+        // #ifdef __USER_DEBUG_P2P_CPP__
+        // std::cout<<"UDP套接字绑定端口!"<<std::endl;
+        // #endif
+        // /*****************调试辅助打印(END)********************/
 
         //TCP套接字绑定端口
         target->addr_send.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -95,39 +95,39 @@ bool P2P_Init(p2p * target)
         #endif
         /*****************调试辅助打印(END)********************/
 
-        target->addr_send.sin_addr.s_addr = inet_addr(target->IPv4_server_UDP);    //目标服务器IP
-        target->addr_send.sin_port    = htons(target->port_server_UDP);           //端口设置导入
-        for(int i= 0;i < 5;i++)
-        {
-            //注册设备口令(UDP)
-            sendRet = sendto(target->socket_UDP,        //UDP套接字
-                            &target->APP_ID,             //口令（app号）
-                            sizeof(target->APP_ID),     //口令大小
-                            0,  //flag
-                            (struct sockaddr *)&(target->addr_send),    //发送服务器
-                            sizeof(target->addr_send));
+        // target->addr_send.sin_addr.s_addr = inet_addr(target->IPv4_server_UDP);    //目标服务器IP
+        // target->addr_send.sin_port    = htons(target->port_server_UDP);           //端口设置导入
+        // for(int i= 0;i < 5;i++)
+        // {
+        //     //注册设备口令(UDP)
+        //     sendRet = sendto(target->socket_UDP,        //UDP套接字
+        //                     &target->APP_ID,             //口令（app号）
+        //                     sizeof(target->APP_ID),     //口令大小
+        //                     0,  //flag
+        //                     (struct sockaddr *)&(target->addr_send),    //发送服务器
+        //                     sizeof(target->addr_send));
             
-            /*****************调试辅助打印(START)********************/
-            #ifdef __USER_DEBUG_P2P_CPP__
-            std::cout<<"terminal UDP send AppID:"<< target->APP_ID << " success!"<<std::endl;
-            std::cout<<"等待服务器UDP响应"<<std::endl;
-            #endif
-            /*****************调试辅助打印(END)********************/
+            // /*****************调试辅助打印(START)********************/
+            // #ifdef __USER_DEBUG_P2P_CPP__
+            // std::cout<<"terminal UDP send AppID:"<< target->APP_ID << " success!"<<std::endl;
+            // std::cout<<"等待服务器UDP响应"<<std::endl;
+            // #endif
+            // /*****************调试辅助打印(END)********************/
 
-            recvRet = recvfrom(target->socket_UDP,&recvAppID,sizeof(recvAppID),0,
-                                (sockaddr *)&(target->addr_recv),(socklen_t *)&(addrLength));
-        }
+        //     recvRet = recvfrom(target->socket_UDP,&recvAppID,sizeof(recvAppID),0,
+        //                         (sockaddr *)&(target->addr_recv),(socklen_t *)&(addrLength));
+        // }
 
 
-        memcpy(&(target->addrCache),&(target->addr_recv.sin_addr.s_addr),4);
-        std::cout<<"接受到响应，IP："<<inet_ntoa(target->addrCache)
-            <<".端口："<<ntohs(target->addr_recv.sin_port)<<std::endl;
+        // memcpy(&(target->addrCache),&(target->addr_recv.sin_addr.s_addr),4);
+        // std::cout<<"接受到响应，IP："<<inet_ntoa(target->addrCache)
+        //     <<".端口："<<ntohs(target->addr_recv.sin_port)<<std::endl;
 
-        /*****************调试辅助打印(START)********************/
-        #ifdef __USER_DEBUG_P2P_CPP__
-        std::cout<<"P2P穿透FINISH"<<std::endl;
-        #endif
-        /*****************调试辅助打印(END)********************/
+        // /*****************调试辅助打印(START)********************/
+        // #ifdef __USER_DEBUG_P2P_CPP__
+        // std::cout<<"P2P穿透FINISH"<<std::endl;
+        // #endif
+        // /*****************调试辅助打印(END)********************/
 
         break;
     

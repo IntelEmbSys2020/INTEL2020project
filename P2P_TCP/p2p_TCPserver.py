@@ -20,7 +20,7 @@ class p2p_TCPserver:
         self.socket_STATION,self.stationAddr = self.socket_TCP.accept()
         #后等待作业端连接
         print("等待作业端连接")
-        self.socket_WORKER,self.stationAddr = self.socket_TCP.accept()
+        self.socket_WORKER,self.workerAddr = self.socket_TCP.accept()
         #穿透完成
         return
     
@@ -32,7 +32,7 @@ class p2p_TCPserver:
         self.socket_WORKER.close()
         self.socket_TCP.close()
 
-    def p2p_Transfer(self):
+    def p2p_Transfer_G2W(self):
         '''
         无脑转播
         方向：地面站->该服务器->作业端
@@ -40,6 +40,16 @@ class p2p_TCPserver:
         while True:
             data = self.socket_STATION.recv(self.__TCP_MAX_PACKAGE_LENGTH)   #收到地面消息
             self.socket_WORKER.send(data)   #转发给作业端
+            print("transfer Once!")
+        
+    def p2p_Transfer_W2G(self):
+        '''
+        无脑转播
+        方向：作业端->该服务器->地面站
+        '''
+        while True:
+            data = self.socket_WORKER.recv(self.__TCP_MAX_PACKAGE_LENGTH)   #收到地面消息
+            self.socket_STATION.send(data)   #转发给作业端
             print("transfer Once!")
         
     
