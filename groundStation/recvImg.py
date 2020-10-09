@@ -24,15 +24,16 @@ def recvImg(num, communicater):
     packNow = 0
     while packNow < packNum:
         #接收数据
-        data,client_addr = communicater.P2P_recvData(MAX_LEN)
+        # communicater.P2P_recvData(packNow.to_bytes(length = 4,byteorder = 'little',signed = True),client_addr)
+        data = communicater.P2P_recvCMD(MAX_LEN)
         #写图文件
         imgLocalFile.write(data)
-        #接收反馈
-        communicater.P2P_sendData(packNow.to_bytes(length = 4,byteorder = 'little',signed = True),client_addr)
+        #包数目加１
         packNow += 1
 
-    #最后一次读取数据
-    data,client_addr = communicater.P2P_recvData(remain)
+    #最后一次接收数据
+    # data,client_addr = communicater.P2P_recvData(remain)
+    data = communicater.P2P_recvCMD(remain)
     #最后一次写图文件
     imgLocalFile.write(data)
 

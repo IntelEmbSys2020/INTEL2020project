@@ -25,22 +25,25 @@ while True:
     '''receive img'''
     imgPath = recvImg(num, communicater)
     img = cv2.imread(imgPath, cv2.IMREAD_COLOR)
-
+    
     '''process img'''
-    age,gender,glasses = run_on_img(img, conf_thresh=0.7)
-    #the return are int, str, bool
-    #turn the info towards bytes
+    info = run_on_img(img, conf_thresh=0.7)
+    age,gender,glasses = info
+    print(info)
+
+    '''the return are int, str, bool'''
+    '''turn the info towards bytes'''
     bGender = str2bytes(gender)
     bAge = int2bytes(age)
     cGlasses = bool2charStar(glasses)
     bGlasses = str2bytes(cGlasses)
 
-    '''send info
-       worker recv it in order age, gender, glasses
-    '''
-    communicater.P2P_sendCMD(bAge)
-    communicater.P2P_sendCMD(bGender)
-    communicater.P2P_sendCMD(bGlasses)    
-    num += 1
+    # '''send info
+    #    worker recv it in order age, gender, glasses
+    # '''
+    # communicater.P2P_sendCMD(bAge)
+    # communicater.P2P_sendCMD(bGender)
+    # communicater.P2P_sendCMD(bGlasses)    
+    # num += 1
 
 print("地面站结束")
